@@ -1,0 +1,25 @@
+services:
+  microstudio:
+    image: node:20-bookworm
+    container_name: microstudio
+    restart: unless-stopped
+
+    working_dir: /microstudio
+
+    ports:
+      - "8080:8080"
+
+    volumes:
+      # Your cloned microStudio repository
+      - .:/microstudio
+
+      # Persistent data outside the repository
+      - ../microstudio-backups/data:/microstudio/data
+      - ../microstudio-backups/files:/microstudio/files
+
+    command: >
+      sh -c "
+        cd /microstudio/server &&
+        npm install &&
+        npm start
+      "

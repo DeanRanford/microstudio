@@ -11,7 +11,7 @@ this.SoundEditor = class SoundEditor extends Manager {
     this.init();
   }
 
-  update() {
+  _update() {
     var f, img, img2;
     super.update();
     if (!this.img_loaded) {
@@ -31,6 +31,19 @@ this.SoundEditor = class SoundEditor extends Manager {
       return img2.addEventListener("click", f);
     }
   }
+
+update() {
+  super.update();
+  if (!this.img_loaded) {
+    this.img_loaded = true;
+
+    const iframe = document.createElement("iframe");
+    iframe.src = "/jfxr_offline.html";
+    iframe.style.cssText = "width: 100%; height: 100%; border: none; position: absolute; top: 0; left: 0; z-index: 100";
+
+    document.getElementById("sample-editor-bg").appendChild(iframe);
+  }
+}
 
   openItem(name) {
     var sound;

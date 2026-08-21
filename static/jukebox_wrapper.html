@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>JukeBox Wrapper</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: #111;
+            color: #ccc;
+            font-family: monospace;
+            overflow: hidden;
+        }
+
+        .bar {
+            display: flex;
+            gap: 6px;
+            padding: 6px;
+            background: #0f1115;
+            border-bottom: 1px solid #23232b;
+        }
+
+        input {
+            flex: 1;
+            background: #181a1f;
+            color: #fff;
+            border: 1px solid #23232b;
+            padding: 6px;
+            font-family: monospace;
+            outline: none;
+        }
+
+        button {
+            background: #23232b;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-family: monospace;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            background: #2e2e38;
+        }
+
+        iframe {
+            width: 100%;
+            height: calc(100% - 38px);
+            border: none;
+            background: #000;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bar">
+        <input id="urlInput" placeholder="JummBox URL with full song data">
+        <button onclick="loadSong()">Load</button>
+        <button onclick="exportSong()">Export</button>
+    </div>
+
+    <iframe id="jummboxFrame"></iframe>
+
+    <script>
+        const iframe = document.getElementById("jummboxFrame");
+        const input = document.getElementById("urlInput");
+        const BASE = "slarmoosbox_offline.html";
+
+        function loadSong() {
+            let v = input.value.trim();
+            if (!v) return;
+
+            let hash = v.includes("#") ? v.slice(v.indexOf("#")) : "#" + v;
+            iframe.src = BASE + hash;
+        }
+
+        /*
+         * IMPORTANT:
+         * JummBox only writes song data to the hash
+         * when it performs a full encode → reload.
+         * This forces that behavior.
+         */
+        function exportSong() {
+            // Ask user to save via Ctrl+R logic
+            iframe.contentWindow.location.reload();
+
+            // Wait for reload, then read URL
+            iframe.onload = () => {
+                try {
+                    input.value = iframe.contentWindow.location.href;
+                } catch {
+                    alert("Unable to read song data.");
+                }
+            };
+        }
+
+        // Deep-link support
+        if (location.hash.length > 1) {
+            iframe.src = BASE + location.hash;
+            input.value = location.hash;
+        } else {
+            iframe.src = BASE;
+        }
+    </script>
+
+</body>
+
+</html>
