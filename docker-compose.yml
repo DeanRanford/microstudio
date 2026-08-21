@@ -16,6 +16,7 @@ services:
       # Persistent data outside the repository
       - ../microstudio-backups/data:/microstudio/data
       - ../microstudio-backups/files:/microstudio/files
+      - ../microstudio-backups/microstudio.wiki:/microstudio/static/microstudio.wiki
 
     command: >
       sh -c "
