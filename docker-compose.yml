@@ -17,6 +17,7 @@ services:
       - ../microstudio-backups/data:/microstudio/data
       - ../microstudio-backups/files:/microstudio/files
       - ../microstudio-backups/microstudio.wiki:/microstudio/static/microstudio.wiki
+      - ../microstudio-backups/ideas:/microstudio/static/ideas
 
     command: >
       sh -c "
